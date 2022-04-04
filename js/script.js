@@ -14,41 +14,69 @@
 5) Добавить нумерацию выведенных фильмов */
 'use strict';
 
-const movieDB = {
-    movies: [
-        "Логан",
-        "Лига справедливости",
-        "Ла-ла лэнд",
-        "Одержимость",
-        "Скотт Пилигрим против..."
-    ]
-};
+document.addEventListener('DOMContentLoaded', () =>{
+    const movieDB = {
+        movies: [
+            "Логан",
+            "Лига справедливости",
+            "Ла-ла лэнд",
+            "Одержимость",
+            "Скотт Пилигрим против..."
+        ]
+    };
 
-const adv = document.querySelectorAll('.promo__adv img'),
-    poster = document.querySelector('.promo__bg'),
-    genre = poster.querySelector('.promo__genre'),
-    moviesList = document.querySelector('.promo__interactive-list');
+    const adv = document.querySelectorAll('.promo__adv img'),
+        poster = document.querySelector('.promo__bg'),
+        genre = poster.querySelector('.promo__genre'),
+        moviesList = document.querySelector('.promo__interactive-list'),
+        addForm = document.querySelector('form.add'),
+        addInput = addForm.querySelector('.adding__input'),
+        checkbox = addForm.querySelector('[type="checkbox"]');
+
+        addForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const newFilm = addInput.value;
+        const favorite = checkbox.checked;
+
+        movieDB.movies.push(newFilm);
+        sortArr(movieDB.movies);
+        });
+
+        const deleteAdv = (arr) => {
+            adv.forEach(item => {
+                item.remove();
+            });
+        };
+
+    const makeChanges = () => {
+        genre.textContent = 'драма';
+
+        poster.style.backgroundImage = 'url("img/bg.jpg")';
+    };
 
 
 
-adv.forEach(item => {
-    item.remove();
+    const sortArr = (arr) => {
+        arr.sort();
+    };
+
+    function createMovieList(films, parent) {
+
+        parent.innerHTML = "";
+
+        films.forEach((film, i) => {
+            parent.innerHTML += `
+                <li class="promo__interactive-item">${i + 1} ${film}
+                    <div class="delete"></div>
+                </li>
+            `;
+        });
+    }
+
+    deleteAdv(adv);
+    makeChanges();
+    sortArr(movieDB.movies);
+
+    createMovieList(movieDB.movies, moviesList);
 });
-
-genre.textContent = 'драма';
-
-poster.style.backgroundImage = 'url("img/bg.jpg")';
-
-moviesList.innerHTML = "";
-
-movieDB.movies.sort();
-
-
-movieDB.movies.forEach((film, i) => {
-    moviesList.innerHTML += `
-        <li class="promo__interactive-item">${i + 1} ${film}
-            <div class="delete"></div>
-        </li>
-    `;
-});
-
